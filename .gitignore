@@ -35,5 +35,9 @@ build/
 mvnw
 mvnw.cmd
 *.properties
-*.css
-*.html
+.css
+.html
+.mvn
+
+src/main/resources/templates
+src/main/resources/static

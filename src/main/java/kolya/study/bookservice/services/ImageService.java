@@ -1,20 +1,17 @@
-package kolya.study.bookservice;
+package kolya.study.bookservice.services;
 
-import ch.qos.logback.core.model.ModelConstants;
+import kolya.study.bookservice.entities.Book;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.List;
 import java.util.Objects;
 @Slf4j
 @Service

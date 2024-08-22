@@ -1,4 +1,4 @@
-package kolya.study.bookservice;
+package kolya.study.bookservice.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

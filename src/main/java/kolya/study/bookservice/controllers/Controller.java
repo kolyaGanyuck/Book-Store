@@ -1,5 +1,12 @@
-package kolya.study.bookservice;
+package kolya.study.bookservice.controllers;
 
+import kolya.study.bookservice.services.ImageService;
+import kolya.study.bookservice.services.PdfConverter;
+import kolya.study.bookservice.services.TextService;
+import kolya.study.bookservice.entities.Book;
+import kolya.study.bookservice.entities.Rating;
+import kolya.study.bookservice.repositories.BookRepository;
+import kolya.study.bookservice.repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

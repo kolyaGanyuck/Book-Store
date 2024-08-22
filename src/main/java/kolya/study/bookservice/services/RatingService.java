@@ -1,5 +1,7 @@
-package kolya.study.bookservice;
+package kolya.study.bookservice.services;
 
+import kolya.study.bookservice.entities.Rating;
+import kolya.study.bookservice.repositories.RatingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
