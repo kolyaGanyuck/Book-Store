@@ -14,6 +14,6 @@ public class Book {
     private String genre;
     private String author;
     private int year;
-
     private String imageCover;
+
 }

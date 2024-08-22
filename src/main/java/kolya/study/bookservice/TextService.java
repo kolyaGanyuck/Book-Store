@@ -1,5 +1,6 @@
 package kolya.study.bookservice;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -7,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 @Service
 public class TextService {
     public List<String> paginateText(Path path) throws IOException {
@@ -28,6 +29,7 @@ public class TextService {
         if (page.length() > 0) {
             pages.add(page.toString().trim());
         }
+        log.info("Текст розбито на сторінки");
         return pages;
     }
 

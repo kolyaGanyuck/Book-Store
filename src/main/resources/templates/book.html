@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+    <link rel="stylesheet" href="/book.css">
+</head>
+<body>
+<header>
+    <h1>Book Details</h1>
+</header>
+<main>
+    <div class="book-details">
+        <div class="book-cover">
+            <img th:src="'data:image/jpeg;base64,' + ${book.imageCover}" alt="Book Cover" class="cover-image"/>
+        </div>
+        <div class="book-info">
+            <h2 th:text="${book.title}">Book Title</h2>
+            <p><strong>Author:</strong> <span th:text="${book.author}">Author Name</span></p>
+            <p><strong>Genre:</strong> <span th:text="${book.genre}">Genre</span></p>
+            <p><strong>Year:</strong> <span th:text="${book.year}">Year</span></p>
+        </div>
+    </div>
+    <a th:href="@{/books/read/{id}(id = ${book.id})}">Читати</a>
+    <a href="/books/catalog">Back to Catalog</a>
+    <a th:text="${rating}"></a>
+    <a th:href="@{/books/rating/{rating}/{bookId}(rating = 1, bookId = ${book.id})}">1</a>
+    <a th:href="@{/books/rating/{rating}/{bookId}(rating = 2, bookId = ${book.id})}">2</a>
+    <a th:href="@{/books/rating/{rating}/{bookId}(rating = 3, bookId = ${book.id})}">3</a>
+    <a th:href="@{/books/rating/{rating}/{bookId}(rating = 4, bookId = ${book.id})}">4</a>
+    <a th:href="@{/books/rating/{rating}/{bookId}(rating = 5, bookId = ${book.id})}">5</a>
+
+</main>
+</body>
+</html>

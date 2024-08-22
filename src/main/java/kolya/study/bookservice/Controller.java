@@ -15,6 +15,7 @@ import java.util.Optional;
 @org.springframework.stereotype.Controller
 @RequestMapping("/books")
 public class Controller {
+    private final RatingRepository ratingRepository;
     private final BookRepository bookRepository;
     private final PdfConverter pdfConverter;
     private final ImageService imageService;
@@ -23,7 +24,8 @@ public class Controller {
     private final String path = null;
 
     @Autowired
-    public Controller(BookRepository bookRepository, PdfConverter pdfConverter, ImageService imageService, TextService textService) {
+    public Controller(RatingRepository ratingRepository, BookRepository bookRepository, PdfConverter pdfConverter, ImageService imageService, TextService textService) {
+        this.ratingRepository = ratingRepository;
         this.bookRepository = bookRepository;
         this.pdfConverter = pdfConverter;
         this.imageService = imageService;
@@ -53,6 +55,11 @@ public class Controller {
     public String bookByTitle(@PathVariable Long id, Model model) {
         Optional<Book> book = bookRepository.findById(id);
         model.addAttribute("book", book.orElse(null));
+        Optional<Rating> ratingObj = ratingRepository.findByBookId(id);
+        if (ratingObj.isEmpty()) {
+            model.addAttribute("rating", 0);
+        } else model.addAttribute("rating", ratingObj.get().getRating());
+
         return "book";
     }
 
