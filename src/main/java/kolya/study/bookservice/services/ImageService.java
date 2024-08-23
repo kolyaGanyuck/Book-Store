@@ -1,6 +1,7 @@
 package kolya.study.bookservice.services;
 
 import kolya.study.bookservice.entities.Book;
+import kolya.study.bookservice.exceptions.ImageProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -16,7 +17,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 public class ImageService {
-    public void getImageCoverFromPdf(MultipartFile pdfFile, Book book){
+    public void getImageCoverFromPdf(MultipartFile pdfFile, Book book) throws ImageProcessingException {
         try {
             PDDocument document = PDDocument.load(pdfFile.getInputStream());
             PDFRenderer pdfRenderer = new PDFRenderer(document);
@@ -35,7 +36,7 @@ public class ImageService {
             log.info("Зображення збережено" );
         } catch (IOException e) {
             log.info("Помилка під час збереження зображення");
-            throw new RuntimeException(e);
+            throw new ImageProcessingException("Помилка під час збереження зображення");
         }
     }
 

@@ -1,5 +1,7 @@
 package kolya.study.bookservice.controllers;
 
+import kolya.study.bookservice.exceptions.ImageProcessingException;
+import kolya.study.bookservice.exceptions.PdfConversionException;
 import kolya.study.bookservice.services.ImageService;
 import kolya.study.bookservice.services.PdfConverter;
 import kolya.study.bookservice.services.TextService;
@@ -9,7 +11,6 @@ import kolya.study.bookservice.repositories.BookRepository;
 import kolya.study.bookservice.repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,29 +46,37 @@ public class Controller {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @ModelAttribute Book book) {
-        pdfConverter.convertPdfToText(file);
-        imageService.getImageCoverFromPdf(file, book);
-        bookRepository.save(book);
-        return ResponseEntity.ok("Файл завантажено успішно");
+    public String uploadFile(@RequestParam("file") MultipartFile file, @ModelAttribute Book book, Model model) {
+        try {
+            pdfConverter.convertPdfToText(file);
+            imageService.getImageCoverFromPdf(file, book);
+            bookRepository.save(book);
+        } catch (PdfConversionException | ImageProcessingException exception) {
+            model.addAttribute("error", exception.getMessage());
+            return "errors/error";
+
+        }
+        return "redirect:/books/catalogue";
     }
 
-    @GetMapping("/catalog")
+    @GetMapping("/catalogue")
     public String getCatalog(Model model) {
         model.addAttribute("books", bookRepository.findAll());
-        return "catalog";
+        return "catalogue";
     }
 
     @GetMapping("/book/{id}")
     public String bookByTitle(@PathVariable Long id, Model model) {
         Optional<Book> book = bookRepository.findById(id);
-        model.addAttribute("book", book.orElse(null));
-        Optional<Rating> ratingObj = ratingRepository.findByBookId(id);
-        if (ratingObj.isEmpty()) {
-            model.addAttribute("rating", 0);
-        } else model.addAttribute("rating", ratingObj.get().getRating());
-
-        return "book";
+        if (book.isPresent()) {
+            Optional<Rating> ratingObj = ratingRepository.findByBookId(id);
+            model.addAttribute("rating", ratingObj.map(Rating::getRating).orElse(0));
+            model.addAttribute("book", book.get());
+            return "book";
+        } else {
+            model.addAttribute("error", "Книга не знайдена");
+            return "/errors/error";
+        }
     }
 
     @GetMapping("/read/{id}")
@@ -85,6 +94,8 @@ public class Controller {
 
         return "readBook";
     }
+
+
 
 }
 

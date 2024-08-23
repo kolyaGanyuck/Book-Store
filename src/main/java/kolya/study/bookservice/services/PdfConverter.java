@@ -1,5 +1,6 @@
 package kolya.study.bookservice.services;
 
+import kolya.study.bookservice.exceptions.PdfConversionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -15,7 +16,7 @@ import java.nio.file.Paths;
 @Component
 public class PdfConverter {
 
-    public void convertPdfToText(MultipartFile pdfFile){
+    public void convertPdfToText(MultipartFile pdfFile) throws PdfConversionException {
         try {
             PDDocument document = PDDocument.load(pdfFile.getInputStream());
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
@@ -26,7 +27,7 @@ public class PdfConverter {
             log.info("Текст успішно збережений у файл: " + fileName);
         } catch (IOException e) {
             log.info("Помилка під час конвертації pdf файлу в формат txt ");
-            throw new RuntimeException(e);
+            throw new PdfConversionException("Помилка під час конвертації pdf файлу в формат txt");
         }
 
 
