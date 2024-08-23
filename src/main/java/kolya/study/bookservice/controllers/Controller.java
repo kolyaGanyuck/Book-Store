@@ -11,6 +11,7 @@ import kolya.study.bookservice.repositories.BookRepository;
 import kolya.study.bookservice.repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.Banner;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @org.springframework.stereotype.Controller
@@ -80,22 +82,32 @@ public class Controller {
     }
 
     @GetMapping("/read/{id}")
-    public String readBook(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Model model) throws IOException {
-        List<String> pages = textService.paginateText(Path.of(path + "\\ " + bookRepository.findById(id).get().getTitle() + ".txt"));
+    public String readBook(@PathVariable Long id, @RequestParam(defaultValue = "1") int page, Model model) {
+        try {
+            Book book = bookRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Книга не знайдена"));
+            List<String> pages = textService.paginateText(Path.of(path + "\\ " + book.getTitle() + ".txt"));
 
-        if (page < 1) page = 1;
-        if (page > pages.size()) page = pages.size();
+            if (page < 1) page = 1;
+            if (page > pages.size()) page = pages.size();
 
-        model.addAttribute("bookTitle", bookRepository.findById(id).get().getTitle());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", pages.size());
-        model.addAttribute("bookId", id);
-        model.addAttribute("currentPageText", pages.get(page - 1));
+            model.addAttribute("bookTitle", bookRepository.findById(id).get().getTitle());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", pages.size());
+            model.addAttribute("bookId", id);
+            model.addAttribute("currentPageText", pages.get(page - 1));
 
-        return "readBook";
+            return "readBook";
+        } catch (IOException  | NoSuchElementException exception) {
+            model.addAttribute("error", exception.getMessage());
+            return "/errors/error";
+        }
     }
 
-
+    @GetMapping("/search/")
+    public String findBooks(@RequestParam(name = "search") String string, Model model) {
+        model.addAttribute("books", bookRepository.findAllByTitleContainingIgnoreCase(string));
+        return "search-books";
+    }
 
 }
 
