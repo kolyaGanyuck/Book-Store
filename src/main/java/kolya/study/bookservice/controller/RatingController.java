@@ -1,7 +1,7 @@
-package kolya.study.bookservice.controllers;
+package kolya.study.bookservice.controller;
 
-import kolya.study.bookservice.services.RatingService;
-import kolya.study.bookservice.repositories.RatingRepository;
+import kolya.study.bookservice.service.RatingService;
+import kolya.study.bookservice.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

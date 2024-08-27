@@ -1,7 +1,7 @@
-package kolya.study.bookservice.services;
+package kolya.study.bookservice.service;
 
-import kolya.study.bookservice.entities.Book;
-import kolya.study.bookservice.exceptions.ImageProcessingException;
+import kolya.study.bookservice.entity.Book;
+import kolya.study.bookservice.exception.ImageProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -39,6 +39,4 @@ public class ImageService {
             throw new ImageProcessingException("Помилка під час збереження зображення");
         }
     }
-
-
 }

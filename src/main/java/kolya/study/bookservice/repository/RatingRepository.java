@@ -1,6 +1,6 @@
-package kolya.study.bookservice.repositories;
+package kolya.study.bookservice.repository;
 
-import kolya.study.bookservice.entities.Rating;
+import kolya.study.bookservice.entity.Rating;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

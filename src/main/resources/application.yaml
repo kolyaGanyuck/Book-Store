@@ -16,6 +16,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+#  security:
+#    user:
+#      name: user
+#      password: user
 file:
   upload-dir: D:/uploads2B
 logging:

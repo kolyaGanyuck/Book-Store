@@ -1,4 +1,4 @@
-package kolya.study.bookservice.entities;
+package kolya.study.bookservice.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

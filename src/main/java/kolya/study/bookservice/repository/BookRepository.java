@@ -1,6 +1,6 @@
-package kolya.study.bookservice.repositories;
+package kolya.study.bookservice.repository;
 
-import kolya.study.bookservice.entities.Book;
+import kolya.study.bookservice.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

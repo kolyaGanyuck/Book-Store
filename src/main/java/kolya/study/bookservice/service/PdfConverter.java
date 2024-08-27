@@ -1,6 +1,6 @@
-package kolya.study.bookservice.services;
+package kolya.study.bookservice.service;
 
-import kolya.study.bookservice.exceptions.PdfConversionException;
+import kolya.study.bookservice.exception.PdfConversionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
