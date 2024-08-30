@@ -11,5 +11,5 @@ import lombok.Data;
 public class Rating {
     @Id
     private Long bookId;
-    private int rating;
+    private Integer rating;
 }

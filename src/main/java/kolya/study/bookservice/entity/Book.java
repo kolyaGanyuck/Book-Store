@@ -18,7 +18,7 @@ public class Book {
     @Size(min = 1, max = 50, message = "{book.create.errors.genre.size_is_invalid}")
     private String genre;
     private String author;
-    private int year;
+    private Integer year;
     private String imageCover;
 
 }
