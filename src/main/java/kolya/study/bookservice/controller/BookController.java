@@ -29,7 +29,7 @@ import java.util.Optional;
 @org.springframework.stereotype.Controller
 @RequestMapping("/books")
 @RequiredArgsConstructor
-public class Controller {
+public class BookController {
     private final RatingRepository ratingRepository;
     private final BookRepository bookRepository;
     private final PdfConverter pdfConverter;

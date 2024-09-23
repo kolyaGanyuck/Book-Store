@@ -1,4 +1,4 @@
-package kolya.study.bookservice.config;
+package kolya.study.bookservice.service;
 
 import kolya.study.bookservice.entity.Role;
 import kolya.study.bookservice.repository.UserRepository;
