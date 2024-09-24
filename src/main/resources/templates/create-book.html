@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Додати книгу</title>
@@ -9,28 +9,36 @@
 
 <div class="form-container">
     <h2>Додати книгу</h2>
+    <div th:if="${errors}">
+        <h2>Є помилки</h2>
+        <ul>
+            <li th:each="error : ${errors}" th:text="${error}"></li>
+        </ul>
+    </div>
     <form method="POST" enctype="multipart/form-data" action="/books/upload">
         <div class="form-group">
             <label for="title">Назва книги:</label>
-            <input type="text" id="title" name="title" required>
+            <input type="text" id="title" name="title" th:value="${book_payload?.title ?: ''}">
         </div>
         <div class="form-group">
             <label for="genre">Жанр:</label>
-            <input type="text" id="genre" name="genre" required>
+            <input type="text" id="genre" name="genre" th:value="${book_payload?.genre ?: ''}">
         </div>
         <div class="form-group">
             <label for="author">Автор:</label>
-            <input type="text" id="author" name="author" required>
+            <input type="text" id="author" name="author" required th:value="${book_payload?.author ?: ''}">
         </div>
         <div class="form-group">
             <label for="year">Рік видання:</label>
-            <input type="number" id="year" name="year" required>
+            <input type="number" id="year" name="year" required th:value="${book_payload?.year ?: ''}">
         </div>
-        <div class="upload"><label for="file">Виберіть файл:</label>
-            <input type="file" id="file" name="file"/>
+        <div class="upload">
+            <label for="file">Виберіть файл:</label>
+            <input type="file" id="file" name="file" required />
             <button type="submit">Завантажити</button>
         </div>
     </form>
+
 </div>
 </body>
 </html>
