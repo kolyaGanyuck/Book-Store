@@ -82,3 +82,7 @@ a {
 a:hover {
     background-color: #0056b3;
 }
+.ratingValue, .ratingValue:hover{
+    background-color: darkseagreen;
+}
+

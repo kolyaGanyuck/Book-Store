@@ -1,11 +1,11 @@
 package kolya.study.bookservice.controller;
 
+import kolya.study.bookservice.dto.UserDto;
 import kolya.study.bookservice.entity.User;
 import kolya.study.bookservice.repository.UserRepository;
-import kolya.study.bookservice.service.UserImageService;
+import kolya.study.bookservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
     private final UserRepository userRepository;
-    private final UserImageService userImageService;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @GetMapping("/create")
     public String formUser() {
@@ -29,17 +28,13 @@ public class UserController {
 
     @PostMapping("/create")
     public String createUser(@RequestParam("file") MultipartFile file, @ModelAttribute User user, Model model) {
-        Optional<User> byUsername = userRepository.findByUsername(user.getUsername());
-        if (byUsername.isPresent()) {
-            model.addAttribute("userExist", byUsername.get().getUsername());
+        Optional<UserDto> userOptional = userService.createUser(user, file);
+        if (userOptional.isEmpty()) {
+            model.addAttribute("userExist", user.getUsername());
             return "user/create-user";
         } else {
-            userImageService.saveImage(file);
-            user.setProfileImage(file.getOriginalFilename());
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
-            model.addAttribute("user", user);
-            return "catalogue";
+            model.addAttribute("user", userOptional);
+            return "redirect:/books/catalogue";
         }
     }
 
@@ -53,5 +48,6 @@ public class UserController {
         }
         return "redirect:/error";
     }
+
 }
 

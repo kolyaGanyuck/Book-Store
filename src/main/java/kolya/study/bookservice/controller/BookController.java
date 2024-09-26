@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import kolya.study.bookservice.exception.ImageProcessingException;
 import kolya.study.bookservice.exception.PdfConversionException;
 import kolya.study.bookservice.service.ImageService;
+import kolya.study.bookservice.service.MyUserDetails;
 import kolya.study.bookservice.service.PdfConverter;
 import kolya.study.bookservice.service.TextService;
 import kolya.study.bookservice.entity.Book;
@@ -11,8 +12,11 @@ import kolya.study.bookservice.entity.Rating;
 import kolya.study.bookservice.repository.BookRepository;
 import kolya.study.bookservice.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -25,7 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
+@Slf4j
 @org.springframework.stereotype.Controller
 @RequestMapping("/books")
 @RequiredArgsConstructor
@@ -39,15 +43,25 @@ public class BookController {
     @Value("${file.upload-dir}")
     private final String path = null;
 
+    public void checkAuthentication(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication != null && authentication.getPrincipal() instanceof MyUserDetails userDetails) {
+            log.info("User ID: " + userDetails.getId());
+        } else {
+            log.info("No authenticated user found.");
+        }
+    }
     @GetMapping("/add-book")
     public String form() {
+        checkAuthentication();
         return "create-book";
+
     }
 
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file,
-            @Valid @ModelAttribute(binding = false) Book book, BindingResult bindingResult, Model model) {
+            @Valid @ModelAttribute Book book, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("book_payload", book);
             model.addAttribute("errors", bindingResult.getAllErrors()

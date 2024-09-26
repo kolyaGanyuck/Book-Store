@@ -24,7 +24,7 @@
     </div>
     <a th:href="@{/books/read/{id}(id = ${book.id})}">Читати</a>
     <a href="/books/catalogue">Back to Catalog</a>
-    <a th:text="${rating}"></a>
+    <a class="ratingValue" th:text="${rating}"></a>
     <a th:href="@{/books/rating/{rating}/{bookId}(rating = 1, bookId = ${book.id})}">1</a>
     <a th:href="@{/books/rating/{rating}/{bookId}(rating = 2, bookId = ${book.id})}">2</a>
     <a th:href="@{/books/rating/{rating}/{bookId}(rating = 3, bookId = ${book.id})}">3</a>
