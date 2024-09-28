@@ -22,7 +22,13 @@
         </div>
         <div class="form-group">
             <label for="genre">Жанр:</label>
-            <input type="text" id="genre" name="genre" th:value="${book_payload?.genre ?: ''}">
+            <select name="genre" id="genre">
+                <option th:each="genre: ${genres}"
+                th:value="${genre}"
+                th:text="${genre.getDisplayName()}">
+                </option>
+            </select>
+<!--            <input type="text" id="genre" name="genre" th:value="${book_payload?.genre ?: ''}">-->
         </div>
         <div class="form-group">
             <label for="author">Автор:</label>
