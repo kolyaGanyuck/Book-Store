@@ -1,12 +1,11 @@
 package kolya.study.bookservice.controller;
 
 import jakarta.validation.Valid;
+import kolya.study.bookservice.dto.UserDto;
+import kolya.study.bookservice.entity.Genre;
 import kolya.study.bookservice.exception.ImageProcessingException;
 import kolya.study.bookservice.exception.PdfConversionException;
-import kolya.study.bookservice.service.ImageService;
-import kolya.study.bookservice.service.MyUserDetails;
-import kolya.study.bookservice.service.PdfConverter;
-import kolya.study.bookservice.service.TextService;
+import kolya.study.bookservice.service.*;
 import kolya.study.bookservice.entity.Book;
 import kolya.study.bookservice.entity.Rating;
 import kolya.study.bookservice.repository.BookRepository;
@@ -29,6 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 @Slf4j
 @org.springframework.stereotype.Controller
 @RequestMapping("/books")
@@ -40,28 +40,36 @@ public class BookController {
     private final ImageService imageService;
     private final TextService textService;
     private final MessageSource messageSource;
+    private final UserService userService;
     @Value("${file.upload-dir}")
     private final String path = null;
 
-    public void checkAuthentication(){
+    public UserDto checkAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.getPrincipal() instanceof MyUserDetails userDetails) {
-            log.info("User ID: " + userDetails.getId());
-        } else {
+            UserDto userDto = userService.getUser(userDetails.getId());
+            if (userDto != null) {
+                log.info("User ID: " + userDetails.getId());
+                return userDto;
+            }
+        } else
             log.info("No authenticated user found.");
-        }
+        return null;
+
     }
+
     @GetMapping("/add-book")
-    public String form() {
+    public String form(Model model) {
         checkAuthentication();
+        model.addAttribute("genres", Genre.values());
         return "create-book";
 
     }
 
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file,
-            @Valid @ModelAttribute Book book, BindingResult bindingResult, Model model) {
+                             @Valid @ModelAttribute Book book, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("book_payload", book);
             model.addAttribute("errors", bindingResult.getAllErrors()
@@ -77,12 +85,15 @@ public class BookController {
             return "errors/error";
 
         }
+
         return "redirect:/books/catalogue";
     }
 
     @GetMapping("/catalogue")
     public String getCatalog(Model model) {
         model.addAttribute("books", bookRepository.findAll());
+        model.addAttribute("userDto", checkAuthentication());
+
         return "catalogue";
     }
 
@@ -93,6 +104,8 @@ public class BookController {
             Optional<Rating> ratingObj = ratingRepository.findByBookId(id);
             model.addAttribute("rating", ratingObj.map(Rating::getRating).orElse(0));
             model.addAttribute("book", book.get());
+            checkAuthentication();
+
             return "book";
         } else {
             model.addAttribute("error", "errors.book.not_found");
@@ -115,7 +128,7 @@ public class BookController {
             model.addAttribute("bookId", id);
             model.addAttribute("currentPageText", pages.get(page - 1));
 
-            return "readBook";
+            return "read-book";
         } catch (IOException | NoSuchElementException exception) {
             model.addAttribute("error", messageSource.getMessage(exception.getMessage(),
                     new Object[0], exception.getMessage(), locale));

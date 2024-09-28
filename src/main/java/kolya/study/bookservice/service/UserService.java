@@ -42,4 +42,9 @@ public class UserService {
         return user;
     }
 
+    public UserDto getUser(Long id){
+        Optional<User> userById = userRepository.findById(id);
+        return userById.map(userMapper::map).orElse(null);
+    }
+
 }

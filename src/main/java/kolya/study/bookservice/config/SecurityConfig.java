@@ -31,7 +31,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(request -> {
             request.requestMatchers("/books/add-book").authenticated();
             request.anyRequest().permitAll();
-        }).formLogin(login -> login.defaultSuccessUrl("/books/catalogue", true))
+        }).formLogin(Customizer.withDefaults())
                 .build();
     }
     @Bean

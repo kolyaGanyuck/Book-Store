@@ -2,7 +2,6 @@ package kolya.study.bookservice.controller;
 
 import kolya.study.bookservice.dto.UserDto;
 import kolya.study.bookservice.entity.User;
-import kolya.study.bookservice.repository.UserRepository;
 import kolya.study.bookservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import java.util.Optional;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserRepository userRepository;
     private final UserService userService;
 
     @GetMapping("/create")
@@ -40,10 +38,9 @@ public class UserController {
 
     @GetMapping("/user-profile/{id}")
     public String userProfile(@PathVariable Long id, Model model) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            model.addAttribute("user", user);
+        UserDto userDto = userService.getUser(id);
+        if (userDto != null) {
+            model.addAttribute("userDto", userDto);
             return "user/profile";
         }
         return "redirect:/error";
