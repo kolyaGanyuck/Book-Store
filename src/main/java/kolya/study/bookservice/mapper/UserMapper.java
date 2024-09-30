@@ -10,6 +10,7 @@ public class UserMapper implements Map<User, UserDto> {
     public UserDto map(User user) {
         return new UserDto(user.getId(),
                 user.getUsername()
-                , user.getProfileImage());
+                , user.getProfileImage()
+                , user.getEmail(), user.isActivated(), user.getActivationCode());
     }
 }
