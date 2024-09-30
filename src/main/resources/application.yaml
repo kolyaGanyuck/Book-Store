@@ -1,6 +1,7 @@
 spring:
   application:
     name: book-service
+
   devtools:
     restart:
       enabled: true
@@ -9,7 +10,6 @@ spring:
     username: postgres
     password: postgre
     driver-class-name: org.postgresql.Driver
-
   web:
     resources:
       static-locations: classpath:/static/, file:uploads/

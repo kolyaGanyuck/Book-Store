@@ -10,7 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Controller
@@ -25,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String createUser(@RequestParam("file") MultipartFile file, @ModelAttribute User user, Model model) {
+    public String createUser(@RequestParam("file") MultipartFile file, @ModelAttribute User user, Model model) throws IOException {
         Optional<UserDto> userOptional = userService.createUser(user, file);
         if (userOptional.isEmpty()) {
             model.addAttribute("userExist", user.getUsername());
@@ -36,6 +38,7 @@ public class UserController {
         }
     }
 
+
     @GetMapping("/user-profile/{id}")
     public String userProfile(@PathVariable Long id, Model model) {
         UserDto userDto = userService.getUser(id);
@@ -44,6 +47,12 @@ public class UserController {
             return "user/profile";
         }
         return "redirect:/error";
+    }
+
+    @GetMapping("{activationCode}")
+    public String activeProfile(@PathVariable String activationCode) {
+        userService.confirmEmail(activationCode);
+        return "redirect:/books/catalogue";
     }
 
 }

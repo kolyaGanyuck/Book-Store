@@ -42,30 +42,21 @@ public class BookController {
     private final MessageSource messageSource;
     private final UserService userService;
     @Value("${file.upload-dir}")
-    private final String path = null;
+    private String path;
 
-    public UserDto checkAuthentication() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && authentication.getPrincipal() instanceof MyUserDetails userDetails) {
-            UserDto userDto = userService.getUser(userDetails.getId());
-            if (userDto != null) {
-                log.info("User ID: " + userDetails.getId());
-                return userDto;
-            }
-        } else
-            log.info("No authenticated user found.");
-        return null;
-
+    @GetMapping("/")
+    public String redirect() {
+        return "redirect:/books/catalogue";
     }
 
     @GetMapping("/add-book")
     public String form(Model model) {
-        checkAuthentication();
         model.addAttribute("genres", Genre.values());
         return "create-book";
 
     }
+
 
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file,
@@ -92,8 +83,7 @@ public class BookController {
     @GetMapping("/catalogue")
     public String getCatalog(Model model) {
         model.addAttribute("books", bookRepository.findAll());
-        model.addAttribute("userDto", checkAuthentication());
-
+        model.addAttribute("userDto", userService.checkAuthentication());
         return "catalogue";
     }
 
@@ -104,7 +94,6 @@ public class BookController {
             Optional<Rating> ratingObj = ratingRepository.findByBookId(id);
             model.addAttribute("rating", ratingObj.map(Rating::getRating).orElse(0));
             model.addAttribute("book", book.get());
-            checkAuthentication();
 
             return "book";
         } else {
