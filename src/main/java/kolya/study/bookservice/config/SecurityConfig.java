@@ -29,9 +29,13 @@ public class SecurityConfig {
         return httpSecurity.
         csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(request -> {
-            request.requestMatchers("/books/add-book").authenticated();
+            request.requestMatchers("/books/add-book").hasRole("ADMIN");
+            request.requestMatchers("/user-profile/**").authenticated();
             request.anyRequest().permitAll();
-        }).formLogin(Customizer.withDefaults())
+        }).formLogin(form -> {
+            Customizer.withDefaults();
+        form.defaultSuccessUrl("/books/catalogue");
+        })
                 .build();
     }
     @Bean

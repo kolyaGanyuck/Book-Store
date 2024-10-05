@@ -29,42 +29,29 @@ public class UserService {
     private final UserMapper userMapper;
     private final RoleService roleService;
     private final MailSenderService mailSenderService;
-    private final String uploadDirectory = System.getProperty("user.dir") + "/uploads/images/anonymous.png";
+    String multipartFile = System.getProperty("user.dir")+ "uploads/images/anonymous.png";
 
     public Optional<UserDto> createUser(User user, MultipartFile file) throws IOException {
         Optional<User> byUsername = userRepository.findByUsername(user.getUsername());
-
+        String fileName = System.getProperty("user.dir") + "/uploads/images/";
         if (byUsername.isPresent()) {
             return Optional.empty();
         } else {
-            Path filePath = Path.of(uploadDirectory);
 
-            // Якщо файл порожній, перевіряємо, чи файл з іменем "anonymous.png" вже існує
-            if (file.isEmpty()) {
-                if (!Files.exists(filePath)) {
-                    // Створюємо файл тільки якщо його не існує
-                    Files.createFile(filePath);
+            if (!file.isEmpty()) {
+                if (!Files.exists(Path.of(fileName + file.getOriginalFilename()))) {
+                    userImageService.saveImage(file);
                 }
             }
-
-            // Задаємо деталі користувача
             setUserDetails(user, file);
 
-            // Якщо файл ще не існує, зберігаємо його
-            if (!Files.exists(filePath)) {
-                userImageService.saveImage(file);
-            }
-
-            // Зберігаємо користувача в базі даних
             userRepository.save(user);
 
-            // Відправляємо email з активаційним кодом
             String message = String.format("Hello %s, tap the link below to activate your account \n" +
                             "http://localhost:8081/user/%s",
                     user.getUsername(), user.getActivationCode());
             mailSenderService.send(user.getEmail(), "Activation code", message);
 
-            // Перетворюємо користувача на DTO і повертаємо
             UserDto userDto = userMapper.map(user);
             return Optional.ofNullable(userDto);
         }
@@ -73,6 +60,9 @@ public class UserService {
     public User setUserDetails(User user, MultipartFile file) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setProfileImage(file.getOriginalFilename());
+        if (file.isEmpty()){
+            user.setProfileImage("anonymous.png");
+        }
         user.setActivationCode(UUID.randomUUID().toString());
         Role roleUser = roleService.findRoleOrCreate("ROLE_USER");
         user.getAuthorities().add(roleUser);

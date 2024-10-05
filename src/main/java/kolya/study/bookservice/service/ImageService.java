@@ -12,7 +12,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Base64;
 import java.util.Objects;
 @Slf4j
