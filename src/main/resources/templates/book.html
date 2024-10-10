@@ -11,12 +11,13 @@
     <h1>Book Details</h1>
 </header>
 <main>
+    <a class="profileLink" th:if="${userDto!= null}" th:href="@{/user/user-profile/{id}(id=${userDto.getId()})}" th:text="${userDto.getUsername()}"></a>
     <div class="book-details">
         <div class="book-cover">
             <img th:src="'data:image/jpeg;base64,' + ${book.imageCover}" alt="Book Cover" class="cover-image"/>
         </div>
         <div class="book-info">
-            <h2 th:text="${book.title}">Book Title</h2>
+            <h2 th:text="${book.titleForDisplay}">Book Title</h2>
             <p><strong>Author:</strong> <span th:text="${book.author}">Author Name</span></p>
             <p><strong>Genre:</strong> <span th:text="${book.genre}">Genre</span></p>
             <p><strong>Year:</strong> <span th:text="${book.year}">Year</span></p>

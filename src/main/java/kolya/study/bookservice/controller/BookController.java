@@ -12,6 +12,7 @@ import kolya.study.bookservice.repository.BookRepository;
 import kolya.study.bookservice.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.mbeans.SparseUserDatabaseMBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
@@ -65,6 +66,9 @@ public class BookController {
             model.addAttribute("book_payload", book);
             model.addAttribute("errors", bindingResult.getAllErrors()
                     .stream().map(ObjectError::getDefaultMessage).toList());
+            model.addAttribute("genres", Genre.values());
+            model.addAttribute("userDto", userService.checkAuthentication());
+
             return "create-book";
         }
         try {
@@ -84,6 +88,8 @@ public class BookController {
     public String getCatalog(Model model) {
         model.addAttribute("books", bookRepository.findAll());
         model.addAttribute("userDto", userService.checkAuthentication());
+        model.addAttribute("genres", Genre.values());
+
         return "catalogue";
     }
 
@@ -94,6 +100,7 @@ public class BookController {
             Optional<Rating> ratingObj = ratingRepository.findByBookId(id);
             model.addAttribute("rating", ratingObj.map(Rating::getRating).orElse(0));
             model.addAttribute("book", book.get());
+            model.addAttribute("userDto", userService.checkAuthentication());
 
             return "book";
         } else {
@@ -116,6 +123,7 @@ public class BookController {
             model.addAttribute("totalPages", pages.size());
             model.addAttribute("bookId", id);
             model.addAttribute("currentPageText", pages.get(page - 1));
+            model.addAttribute("userDto", userService.checkAuthentication());
 
             return "read-book";
         } catch (IOException | NoSuchElementException exception) {
@@ -126,9 +134,24 @@ public class BookController {
     }
 
     @GetMapping("/search/")
-    public String findBooks(@RequestParam(name = "search") String string, Model model) {
-        model.addAttribute("books", bookRepository.findAllByTitleContainingIgnoreCase(string));
-        return "search-books";
+    public String findBooks(@RequestParam(name = "search") String title, Model model) {
+        model.addAttribute("books", bookRepository.findAllByTitleForDisplayContainingIgnoreCase(title));
+        model.addAttribute("genres", Genre.values());
+        model.addAttribute("userDto", userService.checkAuthentication());
+
+        log.info(title);
+        return "catalogue";
+    }
+
+    @PostMapping("/books-by-genre")
+    public String booksByGenre(@RequestParam String genre, Model model){
+        List<Book> allByGenre = bookRepository.findAllByGenre(genre);
+        model.addAttribute("genres", Genre.values());
+        model.addAttribute("books", allByGenre);
+        model.addAttribute("userDto", userService.checkAuthentication());
+
+        log.info(genre);
+        return "catalogue";
     }
 
 }

@@ -29,7 +29,6 @@ public class UserService {
     private final UserMapper userMapper;
     private final RoleService roleService;
     private final MailSenderService mailSenderService;
-    String multipartFile = System.getProperty("user.dir")+ "uploads/images/anonymous.png";
 
     public Optional<UserDto> createUser(User user, MultipartFile file) throws IOException {
         Optional<User> byUsername = userRepository.findByUsername(user.getUsername());
@@ -53,6 +52,7 @@ public class UserService {
             mailSenderService.send(user.getEmail(), "Activation code", message);
 
             UserDto userDto = userMapper.map(user);
+            System.out.println(Optional.ofNullable(userDto));
             return Optional.ofNullable(userDto);
         }
     }
