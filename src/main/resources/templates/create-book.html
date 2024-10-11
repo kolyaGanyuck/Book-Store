@@ -8,6 +8,8 @@
 <body>
 
 <div class="form-container">
+    <div class="profileLink" th:replace="user-profile-link :: user-info-fragment(${userDto})"></div>
+
     <h2>Додати книгу</h2>
     <div th:if="${errors}">
         <h2>Є помилки</h2>
@@ -17,15 +19,16 @@
     </div>
     <form method="POST" enctype="multipart/form-data" action="/books/upload">
         <div class="form-group">
-            <label for="title">Назва книги:</label>
-            <input type="text" id="title" name="title" th:value="${book_payload?.title ?: ''}">
+            <label for="titleForDisplay">Назва книги:</label>
+            <input type="text" id="titleForDisplay" name="titleForDisplay" th:value="${book_payload?.title ?: ''}">
         </div>
         <div class="form-group">
             <label for="genre">Жанр:</label>
             <select name="genre" id="genre">
-                <option th:each="genre: ${genres}"
-                th:selected="${book_payload?.genre == genre}"
-                th:text="${genre.getDisplayName()}">
+                <option th:each="genre : ${genres}"
+                        th:value="${genre}"
+                        th:selected="${book_payload?.genre ?: ''}"
+                        th:text="${genre.getDisplayName()}">
                 </option>
             </select>
         </div>
@@ -39,7 +42,7 @@
         </div>
         <div class="upload">
             <label for="file">Виберіть файл:</label>
-            <input type="file" id="file" name="file" required />
+            <input type="file" id="file" name="file" th:required="true" />
             <button type="submit">Завантажити</button>
         </div>
     </form>

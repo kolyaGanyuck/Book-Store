@@ -5,6 +5,8 @@ spring:
   devtools:
     restart:
       enabled: true
+      poll-interval: 150ms
+      quiet-period: 100ms
   datasource:
     url: jdbc:postgresql://localhost:5432/BookService
     username: postgres

@@ -11,7 +11,7 @@
     <h1>Book Details</h1>
 </header>
 <main>
-    <a class="profileLink" th:if="${userDto!= null}" th:href="@{/user/user-profile/{id}(id=${userDto.getId()})}" th:text="${userDto.getUsername()}"></a>
+    <div class="profileLink" th:replace="user-profile-link :: user-info-fragment(${userDto})"></div>
     <div class="book-details">
         <div class="book-cover">
             <img th:src="'data:image/jpeg;base64,' + ${book.imageCover}" alt="Book Cover" class="cover-image"/>
