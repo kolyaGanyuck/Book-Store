@@ -23,22 +23,22 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-#  security:
-#    oauth2:
-#      client:
-#        provider:
-#          keycloak:
-#            issuer-uri: http://localhost:8080/realms/book-service
-#            user-name-attribute: preferred_username
-#        registration:
-#          keycloak:
-#            client-id: book-app
-#            client-secret: ph0zOALGngz2GEWHy83A9dsPSJncpT9U
-#            scope:
-#              - openid
-#              - view_catalogue
-#              - edit_catalogue
-#              -	microprofile-jwt
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/book-service
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: book-app
+            client-secret: ph0zOALGngz2GEWHy83A9dsPSJncpT9U
+            scope:
+              - openid
+              - view_catalogue
+              - edit_catalogue
+              - microprofile-jwt
 file:
   upload-dir: D:/uploads2B
 #logging:

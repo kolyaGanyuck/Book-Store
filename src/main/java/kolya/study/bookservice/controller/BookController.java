@@ -13,6 +13,7 @@ import kolya.study.bookservice.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.mbeans.SparseUserDatabaseMBean;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
@@ -85,10 +87,11 @@ public class BookController {
     }
 
     @GetMapping("/catalogue")
-    public String getCatalog(Model model) {
+    public String getCatalog(Model model, Principal principal) {
         model.addAttribute("books", bookRepository.findAll());
         model.addAttribute("userDto", userService.checkAuthentication());
         model.addAttribute("genres", Genre.values());
+        LoggerFactory.getLogger(BookController.class).info("Principal: {}", principal);
 
         return "catalogue";
     }
