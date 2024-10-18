@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -24,10 +26,16 @@ public class User {
     private boolean activated;
     private String profileImage;
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name= "user_roles"
-    , joinColumns = @JoinColumn(name = "user_id")
-    , inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "user_roles"
+            , joinColumns = @JoinColumn(name = "user_id")
+            , inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> authorities = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_favorite_books"
+            , joinColumns = @JoinColumn(name = "user_id")
+            , inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private Set<Book> favoriteBook = new HashSet<>();
 
     public User(Long id, String username, String password, String email, String activationCode, boolean activated, String profileImage, List<Role> authorities) {
         this.id = id;
