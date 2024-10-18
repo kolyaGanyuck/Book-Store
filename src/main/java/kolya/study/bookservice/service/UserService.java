@@ -1,6 +1,7 @@
 package kolya.study.bookservice.service;
 
 import kolya.study.bookservice.dto.UserDto;
+import kolya.study.bookservice.entity.Book;
 import kolya.study.bookservice.entity.Role;
 import kolya.study.bookservice.entity.User;
 import kolya.study.bookservice.mapper.UserMapper;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -97,5 +101,9 @@ public class UserService {
             userRepository.save(user);
         }
 
+    }
+    public Set<Book> getFavoriteBookOfUser(Long id){
+        Optional<User> byId = userRepository.findById(id);
+        return byId.get().getFavoriteBook();
     }
 }

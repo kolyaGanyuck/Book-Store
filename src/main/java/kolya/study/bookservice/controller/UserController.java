@@ -1,6 +1,8 @@
 package kolya.study.bookservice.controller;
 
 import kolya.study.bookservice.dto.UserDto;
+import kolya.study.bookservice.entity.Book;
+import kolya.study.bookservice.entity.Genre;
 import kolya.study.bookservice.entity.User;
 import kolya.study.bookservice.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Set;
 
 @Slf4j
 @Controller
@@ -39,7 +41,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/user-profile/{id}")
+    @GetMapping("/profile/{id}")
     public String userProfile(@PathVariable Long id, Model model) {
         UserDto userDto = userService.getUser(id);
         if (userDto != null) {
@@ -53,6 +55,15 @@ public class UserController {
     public String activeProfile(@PathVariable String activationCode) {
         userService.confirmEmail(activationCode);
         return "redirect:/books/catalogue";
+    }
+    @GetMapping("/{id}/favorites")
+    public String userFavoriteBooks(@PathVariable Long id, Model model){
+        Set<Book> favoriteBookOfUser = userService.getFavoriteBookOfUser(id);
+        model.addAttribute("books", favoriteBookOfUser);
+        model.addAttribute("userDto", userService.checkAuthentication());
+        model.addAttribute("genres", Genre.values());
+        model.addAttribute("booksOfUser", true);
+        return "catalogue";
     }
 
 }

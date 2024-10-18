@@ -2,6 +2,7 @@ package kolya.study.bookservice.controller;
 
 import jakarta.validation.Valid;
 import kolya.study.bookservice.dto.UserDto;
+import kolya.study.bookservice.entity.FavoriteBook;
 import kolya.study.bookservice.entity.Genre;
 import kolya.study.bookservice.exception.ImageProcessingException;
 import kolya.study.bookservice.exception.PdfConversionException;
@@ -44,6 +45,8 @@ public class BookController {
     private final TextService textService;
     private final MessageSource messageSource;
     private final UserService userService;
+    FavoriteBook favoriteBook;
+
     @Value("${file.upload-dir}")
     private String path;
 
