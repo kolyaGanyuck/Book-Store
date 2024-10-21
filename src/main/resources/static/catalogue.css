@@ -1,0 +1,119 @@
+/* Загальний стиль сторінки */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Стиль заголовка та користувача */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.user-info {
+    margin-left: auto;
+}
+
+.profileLink {
+    color: #f0f0f0;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #007bff;
+}
+
+.profileLink:hover {
+    background-color: #0056b3;
+}
+
+/* Секція пошуку та фільтрів */
+.catalog-container {
+    display: flex;
+    gap: 30px;
+    padding-top: 20px;
+}
+
+.search-filter-section {
+    width: 250px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Стиль пошукової форми */
+.search-form input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Стиль форми фільтрів */
+.filter-form select, .filter-form button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.btn-reset {
+    display: block;
+    padding: 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.btn-reset:hover {
+    background-color: #e0e0e0;
+}
+
+/* Стиль каталогу книг */
+.catalog {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.book-item {
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 200px;
+}
+
+.book-cover {
+    width: 200px;
+    height: 200px;
+    display: block;
+}
+
+.book-title {
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f8f8f8;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Books Catalog</title>
+    <link rel="stylesheet" href="/catalogue.css">
+</head>
+<body>
+<header class="header">
+    <h1>Books Catalog</h1>
+    <div th:if="${booksOfUser == true}"
+         th:text="'Улюблені книги користувача ' + ${userDto.getUsername()}"></div>
+    <div class="profileLink" th:replace="user-profile-link :: user-info-fragment(${userDto})"></div>
+
+</header>
+<div class="catalog-container">
+    <div class="search-filter-section">
+        <h4>Пошук</h4>
+        <form method="get" enctype="multipart/form-data" action="/books/search/" class="search-form">
+            <input type="text" id="search" name="search" placeholder="Search:">
+        </form>
+
+        <h4>Фільтри</h4>
+        <form action="/books/books-by-genre" method="post" enctype="multipart/form-data" class="filter-form">
+            <select name="genre">
+                <option th:each="genre : ${genres}" th:text="${genre.getDisplayName()}"></option>
+            </select>
+            <button type="submit">Застосувати фільтри</button>
+            <a th:href="@{/books/catalogue}" class="btn btn-reset">Скинути фільтри</a>
+        </form>
+    </div>
+
+    <div class="catalog">
+        <p th:if="${books.size() == 0}">Нема книг</p>
+        <div th:each="book : ${books}" class="book-item">
+            <a th:href="@{/books/book/{id}(id=${book.id})}">
+                <img th:src="'data:image/jpeg;base64,' + ${book.imageCover}" alt="Book Cover" class="book-cover"/>
+                <div th:text="${book.titleForDisplay}" class="book-title"></div>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+<!--div!!-->
+</body>
+</html>

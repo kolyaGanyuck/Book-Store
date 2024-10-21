@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .profile-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+
+        img {
+            height: 200px;
+            width: auto;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .profile-details {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="profile-container">
+    <img th:src="'/images/' + ${userDto.getProfileImage()}" alt="User Profile Image">
+    <h1 th:text="${userDto.getUsername()}">User Name</h1>
+    <a th:href="@{/user/{userId}/favorites(userId = ${userDto.getId()})}">Favorites books:</a>
+
+
+</div>
+</body>
+</html>
