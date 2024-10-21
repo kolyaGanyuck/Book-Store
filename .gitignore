@@ -31,13 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
-*.yaml
+
 mvnw
 mvnw.cmd
 *.properties
-.css
-.html
+
 .mvn
 
-src/main/resources/templates
-src/main/resources/static
