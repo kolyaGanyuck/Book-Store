@@ -27,6 +27,10 @@ file:
   upload-dir: D:/uploads2B
 server:
   port: 8081
+springdoc:
+  swagger-ui:
+    url: /app-api-swagger.yaml
+
 #  security:
 #    oauth2:
 #      client:

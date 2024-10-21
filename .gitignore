@@ -31,10 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
-
+*.yaml
 mvnw
 mvnw.cmd
 *.properties
-
+.css
+.html
 .mvn
 

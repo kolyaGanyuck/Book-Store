@@ -1,24 +1,25 @@
 package kolya.study.bookservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import kolya.study.bookservice.dto.UserDto;
+import kolya.study.bookservice.entity.Book;
 import kolya.study.bookservice.entity.FavoriteBook;
 import kolya.study.bookservice.entity.Genre;
+import kolya.study.bookservice.entity.Rating;
 import kolya.study.bookservice.exception.ImageProcessingException;
 import kolya.study.bookservice.exception.PdfConversionException;
-import kolya.study.bookservice.service.*;
-import kolya.study.bookservice.entity.Book;
-import kolya.study.bookservice.entity.Rating;
 import kolya.study.bookservice.repository.BookRepository;
 import kolya.study.bookservice.repository.RatingRepository;
+import kolya.study.bookservice.service.ImageService;
+import kolya.study.bookservice.service.PdfConverter;
+import kolya.study.bookservice.service.TextService;
+import kolya.study.bookservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.mbeans.SparseUserDatabaseMBean;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -34,6 +35,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
+//@Tag(name = "Book controller")
 @org.springframework.stereotype.Controller
 @RequestMapping("/books")
 @RequiredArgsConstructor
@@ -45,18 +47,17 @@ public class BookController {
     private final TextService textService;
     private final MessageSource messageSource;
     private final UserService userService;
-    FavoriteBook favoriteBook;
 
     @Value("${file.upload-dir}")
     private String path;
 
-
+@Operation(summary = "lala", description = "dadada")
     @GetMapping("/")
     public String redirect() {
         return "redirect:/books/catalogue";
     }
 
-    @GetMapping("/add-book")
+    @GetMapping("/new")
     public String form(Model model) {
         model.addAttribute("genres", Genre.values());
         return "create-book";
@@ -64,7 +65,7 @@ public class BookController {
     }
 
 
-    @PostMapping("/upload")
+    @PostMapping("/new")
     public String uploadFile(@RequestParam("file") MultipartFile file,
                              @Valid @ModelAttribute Book book, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
