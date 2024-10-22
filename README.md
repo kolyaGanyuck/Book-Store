@@ -1,5 +1,6 @@
-<h1>Bookstore</h1>
+<h1><img width="30" height="30" src="https://img.icons8.com/cute-clipart/64/book.png" alt="book"/>  Bookstore</h1>
 <h3>Overview</h3>
+
 Bookstore is online service that provides features enabling users to interact with books.
 The service has next features:
 
@@ -40,3 +41,8 @@ The service has next features:
 - application.yaml
 
 ![Properties](src/main/resources/git-img/properties.png)
+
+<h3>ER diagram</h3>
+
+![Diagram](src/main/resources/git-img/ERD.png)
+
