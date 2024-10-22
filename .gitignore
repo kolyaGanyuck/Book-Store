@@ -38,4 +38,4 @@ mvnw.cmd
 .css
 .html
 .mvn
-apache-maven-3.9.9
+apache-maven-3.9.9/*
